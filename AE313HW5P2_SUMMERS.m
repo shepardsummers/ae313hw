@@ -63,5 +63,67 @@ disp(r);
 fprintf("v");
 disp(v);
 
+% Problem 3 =================================
+
+rMag = sqrt(sum(r.^2));
+
+% Calculate h
+hVec = cross(r, v);
+h = sqrt(sum(hVec.^2));
+
+% Caclulate e
+eVec = cross(v, hVec)/m - r/rMag;
+e = sqrt(sum(eVec.^2));
+
+% Calculate mean anomoly
+maRad = acos((h^2)/(m*rMag*e) - 1/e);
+if dot(r, v) < 0  
+    % angle correction due to unknown quadrent
+    maRad = 2 * pi - maRad;
+end
+ma = maRad * 180/pi;
+
+% Node line needed for angles
+nodeLine = cross([0,0,1], hVec);
+nodeMag = sqrt(sum(nodeLine.^2));
+    
+% Right Ascension of the Ascending Node
+ra = acos(nodeLine(1) / nodeMag); 
+if nodeLine(2) < 0
+    % angle correction due to unknown quadrent
+    ra = 2 * pi - ra;
+end
+ra = (180 / pi) * ra;
+
+% Inclination
+inc = acos(dot(hVec, [0, 0, 1]) / h);
+inc = (180 / pi) * inc;
+    
+% Argument of Perigee
+ap = acos(dot(nodeLine, eVec) / (nodeMag * e));
+if eVec(3) < 0
+    % angle correction due to unknown quadrent
+    ap = 2 * pi - ap;
+end
+ap = (180 / pi) * ap;
+
+a = ((h^2) / m) / (1-e^2);
+
+% Output data
+fprintf("h");
+disp(h);
+fprintf("e");
+disp(e);
+fprintf("theta");
+disp(ma);
+fprintf("RAAN");
+disp(ra);
+fprintf("INC");
+disp(inc);
+fprintf("AP");
+disp(ap);
+fprintf("a");
+disp(a);
+
 
 
